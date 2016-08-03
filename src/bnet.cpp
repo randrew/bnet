@@ -46,6 +46,17 @@ namespace bnet
 	static int sslDummyContext;
 #endif
 
+#if BX_PLATFORM_WINDOWS || BX_PLATFORM_XBOX360
+	bool isInProgress()
+	{
+		return WSAEINPROGRESS == getLastError();
+	}
+
+	bool isWouldBlock()
+	{
+		return WSAEWOULDBLOCK == getLastError();
+	}
+#else
 	bool isInProgress()
 	{
 		return EINPROGRESS == getLastError();
@@ -55,6 +66,7 @@ namespace bnet
 	{
 		return EWOULDBLOCK == getLastError();
 	}
+#endif // BX_PLATFORM_
 
 	void setNonBlock(SOCKET _socket)
 	{
